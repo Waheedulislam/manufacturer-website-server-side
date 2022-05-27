@@ -121,6 +121,13 @@ async function run() {
 
         });
 
+        //post add product
+        app.post('/item', async (req, res) => {
+            const addProduct = req.body;
+            const result = await productCollection.insertOne(addProduct)
+            res.send(result);
+        });
+
         //post review
         app.post('/review', async (req, res) => {
             const addReviews = req.body;
@@ -133,12 +140,6 @@ async function run() {
             const reviews = await reviewsCollection.find(query).toArray();
             res.send(reviews);
         })
-        // app.get('/item', async (req, res) => {
-        //     const query = {};
-        //     const cursor = productCollection.find(query);
-        //     const item = await cursor.toArray();
-        //     res.send(item);
-        // })
         //post
         app.post('/itemOrder', async (req, res) => {
             const addOrder = req.body;
