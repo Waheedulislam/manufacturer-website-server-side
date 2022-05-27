@@ -121,7 +121,20 @@ async function run() {
 
 
         });
-
+        // Delete order delete
+        app.delete('/itemOrder/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const result = await addOrdersCollection.deleteOne(query);
+            res.send(result);
+        });
+        // Delete product delete
+        app.delete('/item/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await productCollection.deleteOne(query);
+            res.send(result);
+        })
         //post update profile
         app.post('/profile', async (req, res) => {
             const myProfile = req.body;
