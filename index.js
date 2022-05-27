@@ -41,6 +41,7 @@ async function run() {
         const addOrdersCollection = client.db("tools").collection("addOrders");
         const usersCollection = client.db("tools").collection("users");
         const reviewsCollection = client.db("tools").collection("reviews");
+        const MyProfileCollection = client.db("tools").collection("myProfile");
 
 
         // all product
@@ -121,6 +122,12 @@ async function run() {
 
         });
 
+        //post update profile
+        app.post('/profile', async (req, res) => {
+            const myProfile = req.body;
+            const result = await MyProfileCollection.insertOne(myProfile)
+            res.send(result);
+        });
         //post add product
         app.post('/item', async (req, res) => {
             const addProduct = req.body;
