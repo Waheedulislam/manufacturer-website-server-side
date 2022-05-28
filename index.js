@@ -75,7 +75,7 @@ async function run() {
             res.send(users);
         })
 
-        app.get('/admin/:email', async (req, res) => {
+        app.get('/admin/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const user = await usersCollection.findOne({ email: email })
             const isAdmin = user.role === 'admin';
@@ -118,7 +118,7 @@ async function run() {
 
 
         // dashboard items
-        app.get('/itemOrder', verifyJWT, async (req, res) => {
+        app.get('/itemOrder/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const decodedEmail = req.decoded.email;
             console.log('decoded', decodedEmail);
@@ -132,7 +132,7 @@ async function run() {
             }
         });
 
-        // get users
+        // get user
         app.get('/user/:email', async (req, res) => {
             const email = req.params.email;
             console.log(id);
