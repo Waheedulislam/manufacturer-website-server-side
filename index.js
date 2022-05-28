@@ -122,9 +122,9 @@ async function run() {
 
         });
         // Delete order delete
-        app.delete('/itemOrder/:email', async (req, res) => {
-            const email = req.params.email;
-            const query = { email: email };
+        app.delete('/itemOrder/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
             const result = await addOrdersCollection.deleteOne(query);
             res.send(result);
         });
