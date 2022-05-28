@@ -72,6 +72,7 @@ async function run() {
 
         app.put('/user/admin/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
+            console.log(email);
             const requester = req.decoded.email;
             const requesterAccount = await usersCollection.findOne({ email: requester });
             if (requesterAccount.role === 'admin') {
@@ -87,7 +88,7 @@ async function run() {
 
         })
 
-        //JWT 
+        //JWT s
         app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
             const user = req.body;
