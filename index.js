@@ -135,12 +135,6 @@ async function run() {
             const result = await productCollection.deleteOne(query);
             res.send(result);
         })
-        //post update profile
-        app.post('/profile', async (req, res) => {
-            const myProfile = req.body;
-            const result = await MyProfileCollection.insertOne(myProfile)
-            res.send(result);
-        });
         //post add product
         app.post('/item', async (req, res) => {
             const addProduct = req.body;
