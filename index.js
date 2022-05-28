@@ -104,7 +104,7 @@ async function run() {
 
 
 
-        // dashboard item
+        // dashboard items
         app.get('/itemOrder', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const decodedEmail = req.decoded.email;
