@@ -106,7 +106,7 @@ async function run() {
 
 
         // dashboard item
-        app.get('/itemOrder/:email', verifyJWT, async (req, res) => {
+        app.get('/itemOrder', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const decodedEmail = req.decoded.email;
             console.log('decoded', decodedEmail);
@@ -118,9 +118,15 @@ async function run() {
             else {
                 return res.status(403).send({ message: 'Forbidden access' });
             }
-
-
         });
+
+        app.get('/itemOrder/:id', verifyJWT, async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await addOrdersCollection.findOne(query);
+            res.send(result);
+        })
+
         // Delete order delete
         app.delete('/itemOrder/:id', async (req, res) => {
             const id = req.params.id;
@@ -139,6 +145,12 @@ async function run() {
         app.post('/item', async (req, res) => {
             const addProduct = req.body;
             const result = await productCollection.insertOne(addProduct)
+            res.send(result);
+        });
+        //post add profile
+        app.post('/profile', async (req, res) => {
+            const addProduct = req.body;
+            const result = await MyProfileCollection.insertOne(addProduct)
             res.send(result);
         });
 
