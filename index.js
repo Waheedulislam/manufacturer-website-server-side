@@ -88,7 +88,7 @@ async function run() {
 
         })
 
-        //JWT s
+        //JWT 
         app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
             const user = req.body;
@@ -120,7 +120,7 @@ async function run() {
             }
         });
 
-        // get user
+        // get users
         app.get('/user/:email', async (req, res) => {
             const email = req.params.email;
             console.log(id);
