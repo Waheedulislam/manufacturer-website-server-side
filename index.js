@@ -41,7 +41,6 @@ async function run() {
         const addOrdersCollection = client.db("tools").collection("addOrders");
         const usersCollection = client.db("tools").collection("users");
         const reviewsCollection = client.db("tools").collection("reviews");
-        const MyProfileCollection = client.db("tools").collection("myProfile");
 
 
         // all product
@@ -120,6 +119,17 @@ async function run() {
             }
         });
 
+        // get user
+        app.get('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            console.log(id);
+            const query = { email: email };
+            const result = await usersCollection.find(query).toArray();
+            res.send(result);
+        })
+
+
+
         app.get('/itemOrder/:id', verifyJWT, async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -145,12 +155,6 @@ async function run() {
         app.post('/item', async (req, res) => {
             const addProduct = req.body;
             const result = await productCollection.insertOne(addProduct)
-            res.send(result);
-        });
-        //post add profile
-        app.post('/profile', async (req, res) => {
-            const addProduct = req.body;
-            const result = await MyProfileCollection.insertOne(addProduct)
             res.send(result);
         });
 
