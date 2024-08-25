@@ -4,6 +4,7 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const app = express();
 const port = process.env.PORT || 5000;
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 // all
 //meddleWare
@@ -25,16 +26,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-const { response } = require("express");
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.4c8oglv.mongodb.net/?retryWrites=true&w=majority`;
-
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverApi: ServerApiVersion.v1,
-});
-
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -50,17 +41,29 @@ function verifyJWT(req, res, next) {
   });
 }
 
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lvfvcug.mongodb.net/?appName=Cluster0`;
+
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+});
+
 async function run() {
   try {
     await client.connect();
-    console.log("mongo is running");
 
-    const productCollection = client.db("tools").collection("products");
-    const addOrdersCollection = client.db("tools").collection("addOrders");
-    const usersCollection = client.db("tools").collection("users");
-    const reviewsCollection = client.db("tools").collection("reviews");
-
-    // back
+    // Product
+    const productCollection = client.db("ProductDB").collection("Product");
+    //Doctor
+    const addOrdersCollection = client.db("OrderDB").collection("Order");
+    // Service
+    const reviewsCollection = client.db("ReviewDB").collection("Review");
+    // Service
+    const usersCollection = client.db("UsersDB").collection("Users");
 
     // all product
     app.get("/item", async (req, res) => {
@@ -72,7 +75,7 @@ async function run() {
     //one product
     app.get("/itemPurchase/:id", async (req, res) => {
       const id = req.params.id;
-      const query = { _id: ObjectId(id) };
+      const query = { _id: new ObjectId(id) };
       const item = await productCollection.findOne(query);
       res.send(item);
     });
@@ -200,15 +203,19 @@ async function run() {
       const result = await addOrdersCollection.insertOne(addOrder);
       res.send(result);
     });
+    console.log("successfully connected to MongoDB!");
   } finally {
-    // await client.closes();
+    // Ensures that the client will close when you finish/error
+    // await client.close();;
   }
 }
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Heroku is Running Server");
+  res.send("Server is Running Server");
 });
 app.listen(port, () => {
-  console.log("server is Running");
+  console.log("Server is Running");
 });
+
+//oQdOfAnIZo4RwJ1U
